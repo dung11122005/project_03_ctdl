@@ -8,7 +8,7 @@
 
 using namespace std;
 
-
+// bảng màu
 #define RESET "\033[0m"
 #define YELLOW "\033[1;33m"
 #define GREEN "\033[0;32m"
@@ -42,6 +42,7 @@ public:
 		ngayNhapKho = "";
 		tinhTrang = 0;
 	}
+
 
 	Sach(string ma, string ten, string tacGia, string nxb, double gia, int nam, int trang, string ngayNhap, int tinhTrang) {
 		this->maSach = ma;
@@ -182,6 +183,7 @@ public:
 		head = nullptr;
 	}
 
+	//hàm tìm sách theo mã
 	Node<T>* timTheoMa(const string ma) {
 		Node<T>* current = head;
 		while (current != nullptr) {
@@ -196,8 +198,18 @@ public:
 
 
 	// Thêm phần tử vào cuối danh sách và ghi vào file
-	void themCuoi(T data) {
-		Node<T>* newNode = new Node<T>(data);
+	bool themCuoi(Sach data) {
+
+		Node<T>* newNode = timTheoMa(data.getMaSach());
+
+		if (newNode != nullptr) {
+			cout << RED << "Ma sach da ton tai vui long nhap ma sach khac!\n";
+			return false;
+		}
+
+
+
+		newNode = new Node<T>(data);
 		if (head == nullptr) {
 			head = newNode;
 		}
@@ -225,9 +237,12 @@ public:
 		}
 		else {
 			cout << RED << "Không thể mở file Sach.txt để ghi." << endl;
+			return false;
 		}
+		return true;
 	}
 
+	//hàm thêm danh sách vào list
 	void themVaoList(T data) {
 		Node<T>* newNode = new Node<T>(data);
 		if (head == nullptr) {
@@ -406,6 +421,7 @@ public:
 	}
 };
 
+//hàm load danh sách sách ra từ file và đưa vào LinkedList<Sach>& danhSachSach
 void loadDanhSachSach(LinkedList<Sach>& danhSachSach) {
 	ifstream file("Sach.txt");
 	if (file.is_open()) {
@@ -444,9 +460,8 @@ void loadDanhSachSach(LinkedList<Sach>& danhSachSach) {
 	}
 }
 
-
+//hàm hiển thị menu quản lí sách
 void menuQuanLySach(LinkedList<Sach>& danhSachSach) {
-
 
 	while (true) {
 		cout << YELLOW << "\n\n";
@@ -459,10 +474,15 @@ void menuQuanLySach(LinkedList<Sach>& danhSachSach) {
 		int chon;
 		cin >> chon;
 		switch (chon) {
+
+			// hiển thị thông tin sách
 		case 1:
 			loadDanhSachSach(danhSachSach);
 			danhSachSach.hienThi();
 			break;
+
+
+			// thêm sách
 		case 2: {
 			loadDanhSachSach(danhSachSach);
 			string ma, ten, tacGia, nxb, ngayNhap;
@@ -489,7 +509,6 @@ void menuQuanLySach(LinkedList<Sach>& danhSachSach) {
 
 
 			// Nhập tác giả và kiểm tra
-
 			cout << GREENS << "Nhap tac gia (khong duoc rong): ";
 			getline(cin, tacGia);
 
@@ -501,7 +520,7 @@ void menuQuanLySach(LinkedList<Sach>& danhSachSach) {
 
 			// Nhập giá bán và kiểm tra
 			do {
-				cout << GREENS << "Nhap gia ban (so duong): ";
+				cout << GREENS << "Nhap gia ban (so duong, vi du: 100000): ";
 				cin >> gia;
 				if (gia == 0) {
 					system("cls");
@@ -527,7 +546,7 @@ void menuQuanLySach(LinkedList<Sach>& danhSachSach) {
 
 			// Nhập số trang và kiểm tra
 			do {
-				cout << GREENS << "Nhap so trang (so nguyen duong): ";
+				cout << GREENS << "Nhap so trang (so nguyen duong, vi du: 100): ";
 				cin >> trang;
 				if (trang == 0) {
 					system("cls");
@@ -553,10 +572,14 @@ void menuQuanLySach(LinkedList<Sach>& danhSachSach) {
 			} while (!checkdDate(ngayNhap));
 
 			Sach sachMoi(ma, ten, tacGia, nxb, gia, nam, trang, ngayNhap, 0);
-			danhSachSach.themCuoi(sachMoi);
-			cout << PINK << "Them sach thanh cong \n";
+			if (danhSachSach.themCuoi(sachMoi)) {
+				cout << PINK << "Them sach thanh cong \n";
+			}
+
 			break;
 		}
+
+			  //xóa sách
 		case 3: {
 			LinkedList<Sach> dss;
 			string ma;
@@ -582,8 +605,13 @@ void menuQuanLySach(LinkedList<Sach>& danhSachSach) {
 }
 
 int mainQuanLySach() {
+	//khởi tạo một sanh sách sách
 	LinkedList<Sach> danhSachSach;
+
+	//load sách từ file và đừa vào danhSachSach
 	loadDanhSachSach(danhSachSach);
+
+	//đưa danh sách sách vào menu để thực hiện chức năng
 	menuQuanLySach(danhSachSach);
 
 	return 0;

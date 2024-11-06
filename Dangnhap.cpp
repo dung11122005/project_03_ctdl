@@ -13,7 +13,7 @@
 
 using namespace std;
 
-
+//bảng màu
 #define RESET "\033[0m"
 #define YELLOW "\033[1;33m"
 #define GREEN "\033[0;32m"
@@ -25,7 +25,7 @@ using namespace std;
 
 const int MAX_ATTEMPTS = 3;
 
-
+//hàm chuyển kí tự khi ấn vào thành dấu *
 string getHiddenInput() {
 	string input;
 	char ch;
@@ -52,6 +52,7 @@ string getHiddenInput() {
 	return input;
 }
 
+//hàm hash password
 bool hashPasswordlogin(string password, string filePassword) {
 	hash <string> hash;
 
@@ -69,7 +70,7 @@ bool hashPasswordlogin(string password, string filePassword) {
 	}
 }
 
-
+//hàm kiểm tra để login
 bool loginAuthentication(string username, string password) {
 	ifstream file("Admin.txt");
 	if (!file) {
@@ -85,7 +86,7 @@ bool loginAuthentication(string username, string password) {
 	return false;
 }
 
-
+//hiển thị login
 bool login() {
 	string user, password;
 	cout << "\n\n\n\n";
@@ -107,7 +108,7 @@ bool login() {
 	}
 }
 
-
+// menu chính để chọn quản lí sách hoặc quản lí phiếu mượn
 bool menu() {
 	while (true) {
 		cout << "\n\n";
@@ -139,7 +140,7 @@ bool menu() {
 	}
 }
 
-
+//hàm main của chức năng login
 int main()
 {
 	for (int i = 0;i < 3;i++) {
@@ -153,7 +154,7 @@ int main()
 			cout << "\n\n";
 			cout << setw(50) << RED << "DANG NHAP SAI QUA 3 LAN, CHUONG TRINH SE DONG SAU 2 GIAY\n\n\n\n";
 			cout << RESET;
-			this_thread::sleep_for(std::chrono::seconds(2));
+			this_thread::sleep_for(chrono::seconds(2));
 			return 0;
 		}
 		else {

@@ -12,7 +12,7 @@
 
 using namespace std;
 
-
+//bảng màu
 #define RESET "\033[0m"
 #define YELLOW "\033[1;33m"
 #define GREEN "\033[0;32m"
@@ -28,6 +28,7 @@ private:
 	string ngayDangKy;
 
 public:
+	// constructor
 	BanDoc(string ma, string ten, string ngayDK) {
 		maBanDoc = ma;
 		hoTen = ten;
@@ -54,7 +55,7 @@ private:
 	int tinhTrang; // 1 là đang mượn, 0 là đã trả
 
 public:
-
+	//constructor
 	PhieuMuon()
 		: soPhieuMuon(0), maBanDoc(""), maSach(""), ngayMuon(""), ngayPhaiTra(""), tinhTrang(0) {}
 
@@ -243,6 +244,7 @@ public:
 		danhSachBanDoc.push_back(banDoc);
 	}
 
+	//hàm hiển thị phiếu mượn
 	void hienThiPhieuMuon() {
 		// Bước 1: Chèn tất cả phiếu mượn vào cây nhị phân
 		TreeNode* root = nullptr;
@@ -278,6 +280,7 @@ public:
 				<< YELLOW << endl;
 		}
 	}
+
 	// Hàm đọc toàn bộ nội dung file Phieumuon.txt và lưu vào vector
 	vector<PhieuMuon> docDanhSachPhieuMuon(const string& fileName) {
 		vector<PhieuMuon> danhSachPhieuMuon;
@@ -309,6 +312,7 @@ public:
 		return danhSachPhieuMuon;
 	}
 
+	//hàm ghi danh sách phiếu mượn vào file
 	void ghiDanhSachPhieuMuon() {
 		ofstream fileOut("Phieumuon.txt", ios::out | ios::trunc); // Mở file với chế độ ghi đè (truncate)
 		if (!fileOut.is_open()) {
@@ -330,7 +334,7 @@ public:
 	}
 
 
-
+	//hàm mượn sách
 	void muonSach(string maSach, string maBanDoc, string ngayMuon, string ngayPhaiTra, vector<PhieuMuon>& dSPhieuMuon, int sophieumuon) {
 
 		bool kiemtramabandoc = false;
@@ -378,6 +382,7 @@ public:
 		cout << PINK << "Muon sach thanh cong!" << endl;
 	}
 
+	//hàm trả sách
 	void traSach(int soPhieuMuon) {
 
 		for (auto& phieu : danhSachPhieuMuon) {
@@ -400,7 +405,7 @@ public:
 		cout << RED << "Khong tim thay phieu muon hoac sach da duoc tra!" << endl;
 	}
 
-
+	//hàm cập nhật phiếu mượn
 	void capNhatFilePhieuMuon(PhieuMuon& phieu) {
 		LinkedList<Sach> danhSachSach;
 		loadDanhSachSach(danhSachSach);
@@ -428,6 +433,7 @@ public:
 	}
 };
 
+//hàm load danh sách phiếu mượn từ file
 vector<PhieuMuon> docDanhSachPhieuMuonTuFile() {
 	vector<PhieuMuon> danhSachPhieuMuon;
 	ifstream file("PhieuMuon.txt");
@@ -461,7 +467,7 @@ vector<PhieuMuon> docDanhSachPhieuMuonTuFile() {
 	return danhSachPhieuMuon;
 }
 
-// Hàm để hiển thị menu
+// Hàm để hiển thị menu quản lí phiếu mượn
 void menuQuanLyPhieuMuon(QuanLyPhieuMuon quanLyPhieuMuon) {
 
 
@@ -523,7 +529,7 @@ void menuQuanLyPhieuMuon(QuanLyPhieuMuon quanLyPhieuMuon) {
 				}
 			} while (!isValidDate(ngayMuon));
 
-
+			//lấy số phiếu mượn ở cuối
 			int sophieumuon = 0;
 			if (quanLyPhieuMuon.getDanhSachPhieuMuon().size() > 0) {
 				for (int i = 0;i < quanLyPhieuMuon.getDanhSachPhieuMuon().size();i++) {
@@ -533,6 +539,7 @@ void menuQuanLyPhieuMuon(QuanLyPhieuMuon quanLyPhieuMuon) {
 				}
 			}
 
+			//kiểm tra xem sách đã được mượn hay chưa
 			int sachdaduocmuon = false;
 			for (auto& val : quanLyPhieuMuon.getDanhSachPhieuMuon()) {
 				if (val.getMaSach() == maSach && val.getTinhTrang() == 1) {
@@ -594,9 +601,13 @@ void menuQuanLyPhieuMuon(QuanLyPhieuMuon quanLyPhieuMuon) {
 }
 
 int mainQuanLyPhieuMua() {
+	//khởi tạo danh sách phiếu mượn và load ra từ file
 	vector<PhieuMuon> danhSachPhieuMuon = docDanhSachPhieuMuonTuFile();
+
 	QuanLyPhieuMuon quanLyPhieuMuon;
+	//xét quản lí phiếu mượn
 	quanLyPhieuMuon.setDanhSachPhieuMuon(danhSachPhieuMuon);
+	//thêm quản lí phiếu mượn vào hàm menu để thực hiện chức năng
 	menuQuanLyPhieuMuon(quanLyPhieuMuon);
 	return 0;
 }
